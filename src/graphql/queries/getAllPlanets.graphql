@@ -1,0 +1,23 @@
+query GetAllPlanets {
+  allPlanets {
+    planets {
+      id
+      name
+      diameter
+      population
+      surfaceWater
+      residentConnection {
+        residents {
+          id
+          name
+          filmConnection {
+            films {
+              id
+              title
+            }
+          }
+        }
+      }
+    }
+  }
+}

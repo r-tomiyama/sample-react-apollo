@@ -2,11 +2,10 @@ import React, { useMemo } from "react";
 
 import reactLogo from "@/assets/react.svg";
 import "./style.css";
-import { useStarships } from "../../hooks/useStarships";
-
+import { useGetAllPlanetsQuery } from "@/graphql/__generated__/typesAndHooks";
+import { Planet } from "./parts/Planet";
 export const Top: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const { loading, error, data } = useStarships();
+  const { loading, error, data } = useGetAllPlanetsQuery();
   const content: JSX.Element = useMemo(() => {
     if (loading) {
       return (
@@ -20,18 +19,19 @@ export const Top: React.FC = () => {
       return <p>エラーが発生しました</p>;
     }
 
+    if (!data || !data.allPlanets || !data.allPlanets.planets) {
+      return <p>データが存在しません</p>;
+    }
+
     return (
       <>
-        {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-          data.allStarships.starships.map(
-            (starship: { id: string; name: string }) => (
-              <div key={starship.id}>
-                <p>{starship.name}</p>
-              </div>
-            )
+        {data.allPlanets.planets
+          .filter(
+            (planet): planet is NonNullable<typeof planet> => planet != null
           )
-        }
+          .map((planet) => (
+            <Planet key={planet.id} planet={planet} />
+          ))}
       </>
     );
   }, [loading, error, data]);

@@ -1,0 +1,13 @@
+query GetAllStarships {
+  allStarships {
+    starships {
+      id
+      name
+      starshipClass
+      crew
+    }
+    pageInfo {
+      hasNextPage
+    }
+  }
+}
